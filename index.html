@@ -1,0 +1,1610 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>John Pacino - Dynamic Virtual Assistant</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
+
+    /* Reset */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #000000 0%, #0047ab 100%);
+      color: #e0e6f0;
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+      z-index: 0;
+    }
+
+    /* Scroll progress bar */
+    #progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 4px;
+      background: #1991ff;
+      width: 0;
+      z-index: 1100;
+      transition: width 0.25s ease;
+      border-radius: 0 0 6px 6px;
+      filter: drop-shadow(0 0 6px #47b4ff);
+    }
+
+    /* Tech background canvas container */
+    #tech-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+      background: transparent;
+    }
+
+    a {
+      color: #82cfff;
+      text-decoration: none;
+      transition: color 0.3s ease, filter 0.3s ease;
+    }
+
+    a:hover,
+    a:focus {
+      text-decoration: underline;
+      color: #a0d8ff;
+      filter: drop-shadow(0 0 6px #90c7ff);
+      outline: none;
+    }
+
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.85);
+      color: #82cfff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      z-index: 1001;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
+      backdrop-filter: saturate(180%) blur(10px);
+      animation: fadeInDown 1s ease forwards;
+    }
+
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    #brand {
+      font-weight: 900;
+      font-size: 1.8rem;
+      letter-spacing: 5px;
+      font-family: 'Poppins', sans-serif;
+      user-select: none;
+      text-shadow: 0 0 10px #1991ff;
+      filter: drop-shadow(0 0 5px #39a7ff);
+      transition: filter 0.3s ease;
+      cursor: default;
+    }
+
+    #brand:hover {
+      filter: drop-shadow(0 0 15px #5cc1ff);
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      padding-left: 0;
+      margin: 0;
+    }
+
+    nav li {
+      margin-left: 2rem;
+      position: relative;
+    }
+
+    nav a {
+      font-weight: 600;
+      font-size: 1rem;
+      letter-spacing: 0.05em;
+      transition: color 0.3s ease, text-shadow 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    nav a:hover,
+    nav a:focus {
+      color: #a0d8ff;
+      text-shadow: 0 0 8px #57b7ff;
+      outline: none;
+    }
+
+    nav button {
+      background: none;
+      border: none;
+      font-size: 1.25rem;
+      color: #82cfff;
+      display: none;
+      cursor: pointer;
+      filter: drop-shadow(0 0 3px #39a7ff);
+      transition: color 0.3s ease;
+    }
+
+    nav button:hover,
+    nav button:focus {
+      color: #a0d8ff;
+      outline: none;
+    }
+
+    /* LinkedIn icon SVG */
+    .linkedin-icon {
+      width: 20px;
+      height: 20px;
+      fill: #0a66c2;
+      transition: fill 0.3s ease;
+    }
+
+    nav a.linkedin-link:hover .linkedin-icon,
+    nav a.linkedin-link:focus .linkedin-icon {
+      fill: #004182;
+      outline: none;
+    }
+
+    /* Hero Section */
+    section#hero {
+      padding: 8rem 2rem 4rem;
+      background: linear-gradient(135deg, #000000cc, #0047abcc);
+      color: #cce6ff;
+      min-height: 90vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .hero-inner {
+      display: flex;
+      gap: 3rem;
+      max-width: 900px;
+      width: 100%;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    .profile-image {
+      flex: 1 1 35%;
+      max-width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      box-shadow: 0 0 50px 10px #1a7ef1cc;
+      border: 4px solid #48a1ff;
+      object-fit: cover;
+      animation: floating 4s ease-in-out infinite;
+      filter: drop-shadow(0 0 12px #3ca3ff);
+      user-select: none;
+      transition: box-shadow 0.3s ease, transform 0.3s ease;
+      cursor: default;
+    }
+
+    .profile-image:hover {
+      box-shadow: 0 0 60px 14px #66b3ffcc;
+      transform: scale(1.05);
+    }
+
+    @keyframes floating {
+      0%,
+      100% {
+        transform: translateY(0);
+        filter: drop-shadow(0 0 8px #3ca3ff);
+      }
+
+      50% {
+        transform: translateY(-18px);
+        filter: drop-shadow(0 0 20px #3ca3ff);
+      }
+    }
+
+    .hero-text {
+      flex: 1 1 55%;
+      min-width: 280px;
+      text-align: left;
+      position: relative;
+      transition: transform 0.3s ease;
+      cursor: default;
+    }
+
+    .hero-text:hover,
+    .hero-text:focus-within {
+      transform: translateY(-4px);
+    }
+
+    /* Typing effect styles */
+    .hero-text h1 {
+      font-weight: 900;
+      font-size: 3.8rem;
+      margin-bottom: 0.3rem;
+      text-shadow: 0 0 15px #1491ff;
+      user-select: text;
+      line-height: 1.1;
+      background: linear-gradient(90deg, #50a7ff, #a0d8ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: hueRotate 12s linear infinite;
+      overflow: hidden;
+      /* For typing effect */
+      white-space: nowrap;
+      border-right: 2.5px solid #a0d8ff;
+      width: 0;
+      animation:
+        typing 3s steps(14, end) forwards,
+        blink 0.75s step-end infinite;
+    }
+
+    @keyframes typing {
+      from {
+        width: 0
+      }
+
+      to {
+        width: 14ch;
+      }
+    }
+
+    @keyframes blink {
+      0%,
+      100% {
+        border-color: transparent;
+      }
+
+      50% {
+        border-color: #a0d8ff;
+      }
+    }
+
+    @keyframes hueRotate {
+      0% {
+        filter: hue-rotate(0deg);
+      }
+
+      100% {
+        filter: hue-rotate(360deg);
+      }
+    }
+
+    .marquee-wrapper {
+      width: 100%;
+      max-width: 480px;
+      height: 40px;
+      overflow: hidden;
+      position: relative;
+      margin-bottom: 2rem;
+      border-radius: 12px;
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(130, 207, 255, 0.4);
+      background: rgba(6, 44, 91, 0.7);
+      box-shadow: 0 4px 20px rgba(24, 68, 121, 0.6);
+      user-select: none;
+      margin-left: 0;
+    }
+
+    .marquee-text {
+      display: inline-block;
+      white-space: nowrap;
+      padding-left: 100%;
+      animation: marquee 12s linear infinite;
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #85d7ff;
+      text-shadow: 0 0 12px #1180ff;
+      letter-spacing: 0.03em;
+      user-select: none;
+      cursor: default;
+    }
+
+    /* Pause marquee on hover */
+    .marquee-wrapper:hover .marquee-text,
+    .marquee-wrapper:focus-within .marquee-text {
+      animation-play-state: paused;
+      outline: none;
+      cursor: default;
+    }
+
+    @keyframes marquee {
+      0% {
+        transform: translateX(0%);
+      }
+
+      100% {
+        transform: translateX(-100%);
+      }
+    }
+
+    .hero-text p {
+      max-width: 600px;
+      font-size: 1.25rem;
+      margin-bottom: 1.7rem;
+      font-weight: 300;
+      letter-spacing: 0.02em;
+      filter: drop-shadow(0 0 6px rgba(0, 71, 171, 0.9));
+      user-select: text;
+      opacity: 0;
+      transform: translateY(12px);
+      animation: fadeUp 1.4s ease forwards 3.2s;
+    }
+
+    @keyframes fadeUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      opacity: 0;
+      transform: translateY(12px);
+      animation: fadeUp 1.4s ease forwards 3.8s;
+    }
+
+    .btn-primary {
+      background-color: #1991ff;
+      color: #fff;
+      padding: 1rem 3rem;
+      border: none;
+      border-radius: 50px;
+      font-size: 1.15rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgb(25 145 255 / 0.8);
+      transition: background-color 0.4s ease, box-shadow 0.4s ease, transform 0.3s ease;
+      user-select: none;
+      filter: drop-shadow(0 0 6px #47b4ff);
+      white-space: nowrap;
+      animation: pulseGlow 3s ease-in-out infinite 4.5s;
+      position: relative;
+      z-index: 1;
+    }
+
+    .btn-primary:hover,
+    .btn-primary:focus {
+      background-color: #0f65b8;
+      outline: none;
+      box-shadow: 0 10px 28px rgb(15 101 184 / 1);
+      transform: scale(1.07);
+    }
+
+    /* Button glow pulse animation */
+    @keyframes pulseGlow {
+      0%,
+      100% {
+        box-shadow: 0 0 12px 0 #47b4ff;
+      }
+
+      50% {
+        box-shadow: 0 0 25px 8px #47b4ff88;
+      }
+    }
+
+    /* Social icons container next to button */
+    .social-icons {
+      display: flex;
+      gap: 1.6rem;
+      align-items: center;
+      user-select: none;
+      margin-left: auto;
+    }
+
+    .social-icons a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(25, 145, 255, 0.95);
+      box-shadow: 0 6px 14px rgba(25, 145, 255, 0.75);
+      color: white;
+      transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+      text-decoration: none;
+      filter: drop-shadow(0 0 8px #47b4ff);
+    }
+
+    .social-icons a svg {
+      width: 24px;
+      height: 24px;
+      fill: white;
+      transition: transform 0.3s ease;
+    }
+
+    .social-icons a:hover,
+    .social-icons a:focus {
+      background: #0f65b8;
+      outline: none;
+      box-shadow: 0 0 20px #0f65b8;
+      transform: scale(1.1);
+    }
+
+    .social-icons a:hover svg,
+    .social-icons a:focus svg {
+      transform: scale(1.15);
+    }
+
+    /* Section fade-in reveal */
+    section {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.8s ease;
+      will-change: transform, opacity;
+    }
+
+    section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* About Section */
+    section#about {
+      background: rgba(3, 19, 41, 0.88);
+      padding: 4rem 2rem 5rem;
+      max-width: 900px;
+      margin: 3rem auto 4rem auto;
+      border-radius: 18px;
+      box-shadow: 0 8px 24px rgb(0 71 171 / 0.6);
+      color: #d0d9f1;
+      user-select: text;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      text-align: left;
+    }
+
+    section#about h3 {
+      width: 100%;
+      font-size: 2.4rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      color: #81bfff;
+      text-align: center;
+      text-shadow: 0 0 10px #1991ff;
+    }
+
+    .about-info {
+      flex: 1 1 380px;
+      font-size: 1.2rem;
+      font-weight: 500;
+      min-width: 280px;
+    }
+
+    .about-info>div {
+      margin-bottom: 1.2rem;
+    }
+
+    .about-info strong {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #57aaff;
+      font-weight: 700;
+      text-shadow: 0 0 14px #76b7ff;
+    }
+
+    .about-image-container {
+      flex: 1 1 320px;
+      max-width: 320px;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 0 28px #49a1ffcc;
+      border: 3px solid #3a8cff;
+      user-select: none;
+      filter: drop-shadow(0 0 14px #3a8cffcc);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: default;
+    }
+
+    .about-image-container:hover {
+      box-shadow: 0 0 40px #68b7ffcc;
+      transform: scale(1.02);
+    }
+
+    .about-image-container img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 16px;
+      object-fit: cover;
+      user-select: none;
+    }
+
+    /* Skills Section */
+    section#skills {
+      background: rgba(3, 19, 41, 0.85);
+      max-width: 900px;
+      margin: 0 auto 4rem auto;
+      padding: 3rem 2rem 3rem 2rem;
+      border-radius: 18px;
+      box-shadow: 0 8px 28px rgb(0 71 171 / 0.7);
+      color: #c9dbff;
+      user-select: text;
+      text-align: center;
+    }
+
+    section#skills h3 {
+      font-size: 2.3rem;
+      font-weight: 700;
+      margin-bottom: 1.8rem;
+      color: #7fbfff;
+      text-shadow: 0 0 10px #1861d1;
+    }
+
+    ul.skills-list {
+      list-style: none;
+      padding-left: 0;
+      font-size: 1.15rem;
+      margin: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    ul.skills-list li {
+      background: #0047ab;
+      padding: 0.9rem 1.4rem;
+      border-radius: 10px;
+      color: #fff;
+      font-weight: 600;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+      user-select: text;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      cursor: default;
+    }
+
+    ul.skills-list li:hover {
+      background-color: #1090ff;
+      box-shadow: 0 8px 22px rgba(16, 144, 255, 0.75);
+    }
+
+    /* Skill image updated and without hyperlink */
+    #skills img {
+      max-width: 100%;
+      border-radius: 12px;
+      margin-bottom: 1rem;
+      user-select: none;
+      box-shadow: 0 0 28px #49a1ffcc;
+      border: 3px solid #3a8cff;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: default;
+    }
+
+    #skills img:hover {
+      box-shadow: 0 0 40px #68b7ffcc;
+      transform: scale(1.02);
+    }
+
+    /* Education Section */
+    section#education {
+      background: rgba(3, 19, 41, 0.85);
+      max-width: 900px;
+      margin: 0 auto 4rem auto;
+      padding: 3rem 2rem 3rem 2rem;
+      border-radius: 18px;
+      box-shadow: 0 8px 30px rgb(0 71 171 / 0.7);
+      color: #c9dbff;
+      user-select: text;
+      text-align: center;
+    }
+
+    section#education h3 {
+      font-size: 2.3rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      color: #7fbfff;
+      text-shadow: 0 0 10px #1861d1;
+    }
+
+    ul.education-list {
+      list-style: none;
+      padding-left: 0;
+      font-size: 1.15rem;
+      font-weight: 500;
+      margin: 0 auto;
+      max-width: 700px;
+      text-align: left;
+    }
+
+    ul.education-list li {
+      margin-bottom: 1.2rem;
+      line-height: 1.5;
+      padding-left: 1.5rem;
+      position: relative;
+      border-left: 3px solid #2d79f7;
+      transition: border-color 0.3s ease;
+      cursor: default;
+    }
+
+    ul.education-list li::before {
+      content: '•';
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: #5ea0ff;
+      font-size: 1.5rem;
+      line-height: 1;
+      user-select: none;
+      text-shadow: 0 0 10px #2f86ff;
+    }
+
+    ul.education-list li span.title {
+      font-weight: 700;
+      color: #a0c8ff;
+    }
+
+    ul.education-list li span.subtext {
+      font-style: italic;
+      color: #bdd9ffcc;
+      display: block;
+      margin-top: 0.15rem;
+      font-weight: 400;
+    }
+
+    /* Education image updated and without hyperlink */
+    #education img {
+      max-width: 100%;
+      border-radius: 12px;
+      margin-bottom: 1rem;
+      user-select: none;
+      box-shadow: 0 0 28px #49a1ffcc;
+      border: 3px solid #3a8cff;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: default;
+    }
+
+    #education img:hover {
+      box-shadow: 0 0 40px #68b7ffcc;
+      transform: scale(1.02);
+    }
+
+    /* Experience Section */
+    section#experience {
+      background: rgba(3, 19, 41, 0.85);
+      max-width: 900px;
+      margin: 0 auto 4rem auto;
+      padding: 3rem 2rem 3rem 2rem;
+      border-radius: 18px;
+      box-shadow: 0 8px 30px rgb(0 71 171 / 0.7);
+      color: #c9dbff;
+      user-select: text;
+      text-align: center;
+    }
+
+    section#experience h3 {
+      font-size: 2.3rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      color: #7fbfff;
+      text-shadow: 0 0 10px #1861d1;
+    }
+
+    ul.experience-list {
+      list-style: none;
+      padding-left: 0;
+      font-size: 1.15rem;
+      font-weight: 500;
+      margin: 0 auto;
+      max-width: 700px;
+      text-align: left;
+    }
+
+    ul.experience-list li {
+      margin-bottom: 1.2rem;
+      line-height: 1.5;
+      padding-left: 1.5rem;
+      position: relative;
+      border-left: 3px solid #2d79f7;
+      transition: border-color 0.3s ease;
+      cursor: default;
+    }
+
+    ul.experience-list li::before {
+      content: '•';
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: #5ea0ff;
+      font-size: 1.5rem;
+      line-height: 1;
+      user-select: none;
+      text-shadow: 0 0 10px #2f86ff;
+    }
+
+    ul.experience-list li span.title {
+      font-weight: 700;
+      color: #a0c8ff;
+    }
+
+    ul.experience-list li span.period {
+      float: right;
+      font-style: italic;
+      color: #92aeea;
+      font-weight: 600;
+      user-select: text;
+    }
+
+    ul.experience-list li:hover {
+      border-color: #40a9ff;
+    }
+
+    /* Certifications Section */
+    section#certifications {
+      background: rgba(3, 19, 41, 0.85);
+      max-width: 900px;
+      margin: 0 auto 4rem auto;
+      padding: 3rem 2rem 3rem 2rem;
+      border-radius: 18px;
+      box-shadow: 0 8px 30px rgb(0 71 171 / 0.7);
+      color: #c9dbff;
+      user-select: text;
+      text-align: center;
+    }
+
+    section#certifications h3 {
+      font-size: 2.3rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      color: #7fbfff;
+      text-shadow: 0 0 10px #1861d1;
+    }
+
+    ul.certification-list {
+      list-style: none;
+      padding-left: 0;
+      font-size: 1.15rem;
+      font-weight: 500;
+      margin: 0 auto;
+      max-width: 700px;
+      text-align: left;
+    }
+
+    ul.certification-list li {
+      margin-bottom: 1.1rem;
+      line-height: 1.4;
+      padding-left: 1.5rem;
+      position: relative;
+      border-left: 3px solid #2d79f7;
+      transition: border-color 0.3s ease;
+      cursor: default;
+    }
+
+    ul.certification-list li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: #60b0ff;
+      font-size: 1.3rem;
+      line-height: 1;
+      user-select: none;
+      font-weight: bold;
+      text-shadow: 0 0 8px #63afff;
+    }
+
+    /* Services Section */
+    section#services {
+      background: rgba(0, 55, 110, 0.9);
+      padding: 4rem 1.5rem 5rem 1.5rem;
+      color: #cee6ffcc;
+      border-radius: 18px;
+      max-width: 960px;
+      margin: 0 auto 5rem auto;
+      box-shadow: 0 10px 40px rgba(0, 66, 130, 0.85);
+      text-align: center;
+    }
+
+    section#services h3 {
+      font-size: 2.6rem;
+      margin-bottom: 2.8rem;
+      font-weight: 800;
+      color: #60a6ff;
+      text-shadow: 0 0 18px #1a5fb8;
+      user-select: none;
+    }
+
+    .services-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 2.8rem;
+    }
+
+    .service-card {
+      background: #022d63;
+      border-radius: 20px;
+      padding: 2rem 2.2rem 2rem 2.2rem;
+      box-shadow: 0 12px 30px rgb(0 0 0 / 0.2);
+      transition: transform 0.4s ease, box-shadow 0.4s ease, background-color 0.3s ease;
+      cursor: default;
+      user-select: none;
+      color: #c8e7ff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 150px;
+    }
+
+    .service-card:hover,
+    .service-card:focus-within {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 48px rgb(3 46 95 / 0.9);
+      color: #d4f0ff;
+      outline: none;
+      background: #00418b;
+    }
+
+    /* Additional hover scale effect */
+    .service-card:hover {
+      transform: scale(1.07) translateY(-10px);
+      box-shadow: 0 20px 48px rgba(0, 0, 0, 0.3);
+    }
+
+    .service-card h4 {
+      margin-top: 0;
+      color: #58b0ff;
+      font-weight: 800;
+      margin-bottom: 1.4rem;
+      text-shadow: 0 0 12px #67bfff;
+      user-select: text;
+    }
+
+    .service-card p {
+      color: #aabddb;
+      font-size: 1rem;
+      line-height: 1.5;
+      font-weight: 400;
+      user-select: text;
+      flex-grow: 1;
+    }
+
+    /* Contact Section */
+    section#contact {
+      background: rgba(0, 18, 45, 0.95);
+      max-width: 700px;
+      margin: 3rem auto 4rem;
+      padding: 3.5rem 2.5rem;
+      border-radius: 22px;
+      box-shadow: 0 10px 32px rgb(1 54 110 / 0.85);
+      color: #a3caff;
+      user-select: text;
+      position: relative;
+      text-align: center;
+    }
+
+    section#contact h3 {
+      font-weight: 900;
+      font-size: 2.5rem;
+      margin-bottom: 2.2rem;
+      color: #7fbfff;
+      text-shadow: 0 0 14px #2d89ff;
+      user-select: none;
+      letter-spacing: 0.05em;
+    }
+
+    .contact-list {
+      list-style: none;
+      padding-left: 0;
+      font-size: 1.25rem;
+      column-count: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 1.8rem;
+      user-select: text;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .contact-list li {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .contact-list li svg {
+      width: 30px;
+      height: 30px;
+      fill: #3ea1ff;
+      flex-shrink: 0;
+      filter: drop-shadow(0 0 7px #4bb4ffcc);
+      transition: filter 0.3s ease;
+    }
+
+    .contact-list li:hover svg,
+    .contact-list li:focus-within svg {
+      filter: drop-shadow(0 0 14px #61b7ffcc);
+      outline: none;
+    }
+
+    .contact-list a {
+      font-weight: 700;
+      color: #d8ebff;
+      word-break: break-word;
+      user-select: text;
+      transition: color 0.3s ease;
+    }
+
+    .contact-list a:hover,
+    .contact-list a:focus {
+      color: #7ec3ff;
+      outline: none;
+      text-decoration: underline;
+    }
+
+    /* Contact Form */
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      margin-top: 1.8rem;
+      user-select: text;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: left;
+    }
+
+    form label {
+      font-weight: 700;
+      color: #82cfff;
+      user-select: text;
+    }
+
+    form input,
+    form textarea {
+      padding: 0.65rem;
+      border-radius: 10px;
+      border: none;
+      font-size: 1.1rem;
+      font-family: 'Poppins', sans-serif;
+      resize: vertical;
+      box-shadow: 0 0 12px rgba(100, 160, 255, 0.6);
+      background: rgba(10, 38, 65, 0.9);
+      color: #e0e6f0;
+      user-select: text;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      border: 1.5px solid transparent;
+    }
+
+    form input:focus,
+    form textarea:focus {
+      outline: 2px solid #3db2ff;
+      box-shadow: 0 0 22px #3db2ff;
+      background: rgba(10, 38, 65, 1);
+      border-color: #49aeff;
+    }
+
+    form textarea {
+      min-height: 120px;
+    }
+
+    form button[type="submit"] {
+      background-color: #1991ff;
+      color: white;
+      font-weight: 700;
+      padding: 1rem 2.5rem;
+      border-radius: 50px;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+      filter: drop-shadow(0 0 8px #47b4ff);
+      font-size: 1.25rem;
+      user-select: none;
+      letter-spacing: 0.05em;
+      align-self: flex-start;
+      box-shadow: 0 0 16px #4db0ff;
+    }
+
+    form button[type="submit"]:hover,
+    form button[type="submit"]:focus {
+      background-color: #0f65b8;
+      outline: none;
+      box-shadow: 0 0 24px #0f65b8;
+      transform: scale(1.08);
+    }
+
+    /* Status message */
+    #form-status {
+      margin-top: 1rem;
+      color: #a0d8ff;
+      min-height: 1.25rem;
+      font-weight: 600;
+      font-style: italic;
+      user-select: text;
+    }
+
+    #form-status[aria-live] {
+      position: absolute;
+      left: -9999px;
+      height: 1px;
+      width: 1px;
+      overflow: hidden;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 2.5rem 1rem 2.5rem;
+      background: #000e20;
+      color: #809dbd;
+      font-size: 1rem;
+      user-select: none;
+      text-shadow: 0 0 12px #21458288;
+      letter-spacing: 0.07em;
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      align-items: center;
+      font-weight: 500;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .social-links a {
+      color: #82cfff;
+      font-weight: 700;
+      text-decoration: none;
+      font-size: 1.2rem;
+      transition: color 0.3s ease, text-shadow 0.3s ease;
+      position: relative;
+    }
+
+    .social-links a::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 2px;
+      background: #82cfff;
+      left: 0;
+      bottom: -6px;
+      opacity: 0;
+      transform: scaleX(0);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      border-radius: 1px;
+    }
+
+    .social-links a:hover,
+    .social-links a:focus {
+      color: #a0d8ff;
+      text-shadow: 0 0 10px #a0d8ff;
+      outline: none;
+    }
+
+    .social-links a:hover::after,
+    .social-links a:focus::after {
+      opacity: 1;
+      transform: scaleX(1);
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      0% {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Responsive menu for smaller screens */
+    @media (max-width: 768px) {
+      nav ul {
+        display: none;
+        flex-direction: column;
+        background: rgba(6, 45, 87, 0.95);
+        position: fixed;
+        top: 60px;
+        right: 0;
+        width: 240px;
+        height: calc(100vh - 60px);
+        padding: 1.5rem;
+        border-radius: 0 0 0 16px;
+        box-shadow: -4px 0 18px rgb(0 0 0 / 0.6);
+        z-index: 999;
+      }
+
+      nav ul.show {
+        display: flex;
+        animation: fadeInUp 0.4s ease both;
+      }
+
+      nav li {
+        margin: 1.6rem 0;
+        margin-left: 0;
+      }
+
+      nav button {
+        display: block;
+      }
+
+      /* Stack hero inner vertically on mobile */
+      section#hero {
+        padding: 5rem 2rem 3rem;
+      }
+
+      .hero-inner {
+        flex-direction: column;
+        gap: 2.5rem;
+      }
+
+      .hero-text {
+        flex: unset;
+        text-align: center;
+      }
+
+      .profile-image {
+        max-width: 90vw;
+        width: 280px;
+        height: 280px;
+        border-radius: 50%;
+        margin: 0 auto;
+      }
+
+      /* About section stacks image and text vertically with full width */
+      section#about {
+        flex-direction: column;
+        padding: 3rem 1.5rem 4rem;
+        text-align: center;
+      }
+
+      .about-info {
+        flex: unset;
+        order: 2;
+        margin-top: 2rem;
+      }
+
+      .about-image-container {
+        max-width: 80vw;
+        order: 1;
+        margin: 0 auto;
+      }
+
+      /* Adjust hero-actions and social-icons on mobile */
+      .hero-actions {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .social-icons {
+        justify-content: center;
+        margin-left: 0;
+      }
+
+      .hero-text h1 {
+        font-size: 2.7rem;
+      }
+
+      .hero-text p {
+        font-size: 1.1rem;
+      }
+
+      .btn-primary {
+        width: 100%;
+        text-align: center;
+      }
+
+      .service-card {
+        min-height: auto;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="progress-bar" aria-hidden="true"></div>
+  <canvas id="tech-bg" aria-hidden="true"></canvas>
+
+  <header>
+    <div id="brand" tabindex="-1">JOHN</div>
+    <nav aria-label="Primary navigation">
+      <button aria-expanded="false" aria-controls="primary-navigation" id="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+      <ul id="primary-navigation">
+        <li><a href="#hero">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#education">Education</a></li>
+        <li><a href="#experience">Experience</a></li>
+        <li><a href="#certifications">Certifications</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section id="hero" tabindex="-1" class="visible" aria-label="Hero section introduction">
+      <div class="hero-inner">
+        <img class="profile-image" src="https://i.ibb.co/67QsnGVC/IMG-0422.jpg" alt="John Pacino Profile Picture" />
+        <div class="hero-text">
+          <h1 aria-live="polite" aria-atomic="true" aria-relevant="text">John Pacino</h1>
+          <div class="marquee-wrapper" aria-label="Dynamic Virtual Assistant marquee" tabindex="0">
+            <div class="marquee-text" aria-hidden="true">Dynamic Virtual Assistant • Dynamic Virtual Assistant • Dynamic Virtual Assistant • Dynamic Virtual Assistant • </div>
+          </div>
+          <p>Virtual assistant for 4 years specializing in DNS configuration, domain management, E-commerce, WordPress,
+            social media, technical support, and customer service.</p>
+          <div class="hero-actions">
+            <button class="btn-primary" onclick="document.getElementById('contact').scrollIntoView({behavior: 'smooth'})" aria-label="Contact John Pacino">Contact Me</button>
+            <nav class="social-icons" aria-label="Contact Icons">
+              <a href="mailto:johncedrick.pacino@gmail.com" aria-label="Email John Pacino" title="Email" target="_blank" rel="noopener noreferrer" tabindex="0">
+                <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 2v.01L12 13 4 6.01V6h16Z"/></svg>
+              </a>
+              <a href="https://wa.me/639940933049" aria-label="WhatsApp John Pacino" title="WhatsApp" target="_blank" rel="noopener noreferrer" tabindex="0">
+                <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" fill="white" viewBox="0 0 24 24"><path d="M6.62 10.79a15.093 15.093 0 006.59 6.59l2.2-2.2a1 1 0 011.11-.21c1.2.48 2.5.74 3.87.74a1 1 0 011 1v3.5a1 1 0 01-1 1C10.07 21.5 2.5 13.93 2.5 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.37.26 2.67.74 3.87a1 1 0 01-.21 1.11l-2.2 2.2z"/></svg>
+              </a>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" tabindex="-1" aria-labelledby="about-title" class="reveal">
+      <h3 id="about-title">About Me</h3>
+      <div class="about-image-container">
+        <img src="https://i.ibb.co/5x1qpqvJ/IMG-5768.jpg" alt="John Pacino Additional Picture" />
+      </div>
+      <div class="about-info">
+        <div>
+          <strong>Name:</strong> John Pacino
+        </div>
+        <div>
+          <strong>Role:</strong> Dynamic Virtual Assistant
+        </div>
+        <div>
+          <strong>Experience:</strong> Virtual assistant for 4 years
+        </div>
+        <div>
+          <strong>Age:</strong> 24
+        </div>
+        <div>
+          <strong>Email:</strong> <a href="mailto:johncedrick.pacino@gmail.com" aria-label="Email John Pacino">johncedrick.pacino@gmail.com</a>
+        </div>
+        <div>
+          <strong>WhatsApp:</strong> <a href="https://wa.me/639940933049" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp John Pacino">+63 994 093 3049</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="skills" tabindex="-1" aria-labelledby="skills-title" class="reveal">
+      <h3 id="skills-title">Skills</h3>
+      <img src="https://i.ibb.co/XkM9r4bN/istockphoto-1365169514-640x640.jpg" alt="Skills Image" id="skills-img">
+      <ul class="skills-list" role="list">
+        <li>DNS Configuration</li>
+        <li>Domain Management</li>
+        <li>WordPress Development</li>
+        <li>Social Media Marketing</li>
+        <li>Customer Support</li>
+      </ul>
+    </section>
+
+    <section id="education" tabindex="-1" aria-labelledby="education-title" class="reveal">
+      <h3 id="education-title">Education</h3>
+      <img src="https://i.ibb.co/93dX8F0v/pngtree-a-graduation-cap-is-shown-in-a-blue-background-with-a-image-16416821.jpg" alt="Education Image" id="education-img">
+      <ul class="education-list" role="list">
+        <li>
+          <span class="title">STI COLLEGE</span>
+          <span>Bachelor of Science In Information Technology</span>
+          <span class="subtext">GPA: 1.34</span>
+        </li>
+      </ul>
+    </section>
+
+    <section id="experience" tabindex="-1" aria-labelledby="experience-title" class="reveal">
+      <h3 id="experience-title">Corporate Experience</h3>
+      <img src="https://i.ibb.co/vCf20K1G/group-of-business-people-silhouette-businesspeople-over-abstract-background-free-photo.jpg" alt="Experience Image" id="experience-img">
+      <ul class="experience-list" role="list">
+        <li><span class="title">Advance Technical Support</span> - Startek Inc. / Telecommunication At&t <span class="period">2018 - 2020</span></li>
+        <li><span class="title">Account Supervisor</span> - Ibex Global / Fedex Logistics <span class="period">2020 - 2021</span></li>
+        <li><span class="title">Team Leader</span> - Sutherland Global / Webhosting GoDaddy <span class="period">2021 - 2023</span></li>
+        <li><span class="title">Senior Process Executive</span> - Cognizant / Google Inc <span class="period">2023 - Present</span></li>
+      </ul>
+    </section>
+
+    <section id="certifications" tabindex="-1" aria-labelledby="certifications-title" class="reveal">
+      <h3 id="certifications-title">Certifications</h3>
+      <img src="https://i.ibb.co/WvJRf5fV/360-F-353995594-6-AW7-CYzgqk-STCMktf-FSm2-Xyjv-LDzau-DX.jpg" alt="Certification Image" id="certification-img">
+      <ul class="certification-list" role="list">
+        <li>Certified Virtual Assistant Professional</li>
+        <li>Google Workspace Administration Certified</li>
+        <li>WordPress Expert Certification</li>
+        <li>Social Media Marketing Specialist</li>
+        <li>E-commerce Management Certificate</li>
+      </ul>
+    </section>
+
+    <section id="services" tabindex="-1" aria-labelledby="services-title" class="reveal">
+      <h3 id="services-title">Niche Expertise & Services</h3>
+      <div class="services-list">
+        <article class="service-card" tabindex="0">
+          <h4>DNS Configuration</h4>
+          <p>Expert management and configuration of DNS settings to secure and optimize your domain.</p>
+        </article>
+        <article class="service-card" tabindex="0">
+          <h4>Domain Management</h4>
+          <p>Comprehensive handling of domain registration, renewal, transfers, and management.</p>
+        </article>
+        <article class="service-card" tabindex="0">
+          <h4>Email Management</h4>
+          <p>Organizing and maintaining your email accounts and settings for smooth communication.</p>
+        </article>
+        <article class="service-card" tabindex="0">
+          <h4>WordPress Services</h4>
+          <p>Setup, maintenance, troubleshooting, and customization for your WordPress websites.</p>
+        </article>
+        <article class="service-card" tabindex="0">
+          <h4>E-commerce</h4>
+          <p>Manage online store operations including product listings, customer interactions, and order processing.</p>
+        </article>
+        <article class="service-card" tabindex="0">
+          <h4>Social Media Management</h4>
+          <p>Content scheduling, audience engagement, and analytics to grow your social media presence.</p>
+        </article>
+        <article class="service-card" tabindex="0">
+          <h4>Technical Support</h4>
+          <p>Troubleshooting and resolving technical issues promptly to minimize downtime.</p>
+        </article>
+        <article class="service-card" tabindex="0">
+          <h4>Customer Service</h4>
+          <p>Professional assistance and support to enhance customer satisfaction and loyalty.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="contact" tabindex="-1" aria-labelledby="contact-title" class="reveal">
+      <h3 id="contact-title">Get In Touch</h3>
+      <ul class="contact-list" role="list">
+        <li>
+          <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24">
+            <path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 2v.01L12 13 4 6.01V6h16Z" />
+          </svg>
+          Email: <a href="mailto:johncedrick.pacino@gmail.com">johncedrick.pacino@gmail.com</a>
+        </li>
+        <li>
+          <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24">
+            <path d="M6.62 10.79a15.093 15.093 0 006.59 6.59l2.2-2.2a1 1 0 011.11-.21c1.2.48 2.5.74 3.87.74a1 1 0 011 1v3.5a1 1 0 01-1 1C10.07 21.5 2.5 13.93 2.5 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.37.26 2.67.74 3.87a1 1 0 01-.21 1.11l-2.2 2.2z" />
+          </svg>
+          WhatsApp: <a href="https://wa.me/639940933049" target="_blank" rel="noopener noreferrer">+63 994 093 3049</a>
+        </li>
+      </ul>
+      <form id="contact-form" aria-label="Contact form" action="mailto:johncedrick.pacino@gmail.com" method="POST" enctype="text/plain" onsubmit="return validateForm()">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="Name" aria-required="true" required />
+        <label for="email-address">Email:</label>
+        <input type="email" id="email-address" name="Email" aria-required="true" required />
+        <label for="message">Message:</label>
+        <textarea id="message" name="Message" aria-required="true" required></textarea>
+        <button type="submit" class="btn-primary" aria-label="Send message">Send Message</button>
+      </form>
+      <p id="form-status" role="alert" aria-live="polite" aria-atomic="true" style="margin-top:1rem; color:#a0d8ff; min-height: 1.25rem;"></p>
+    </section>
+  </main>
+
+  <footer>
+    &copy; 2024 John Pacino. All rights reserved.
+    <div class="social-links" aria-label="Social media links">
+      <!-- You can add social links here if needed -->
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      const navToggle = document.getElementById('nav-toggle');
+      const navMenu = document.getElementById('primary-navigation');
+
+      navToggle.addEventListener('click', () => {
+        const expanded = navToggle.getAttribute('aria-expanded') === 'true' || false;
+        navToggle.setAttribute('aria-expanded', !expanded);
+        navMenu.classList.toggle('show');
+      });
+
+      // Close nav when selecting link on mobile
+      const navLinks = navMenu.querySelectorAll('a');
+      navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          if (navMenu.classList.contains('show')) {
+            navMenu.classList.remove('show');
+            navToggle.setAttribute('aria-expanded', false);
+          }
+        });
+      });
+
+      // Scroll progress bar update
+      const progressBar = document.getElementById('progress-bar');
+      window.addEventListener('scroll', () => {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const scrollPercent = (scrollTop / docHeight) * 100;
+        progressBar.style.width = scrollPercent + '%';
+      });
+
+    })();
+
+    // Simple client validation function for mailto form
+    function validateForm() {
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email-address').value.trim();
+      const message = document.getElementById('message').value.trim();
+      const status = document.getElementById('form-status');
+
+      if (!name || !email || !message) {
+        status.textContent = "Please fill in all fields.";
+        return false;
+      }
+      // Basic email validation regex
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        status.textContent = "Please enter a valid email address.";
+        return false;
+      }
+      status.textContent = "Message ready to send.";
+      return true; // proceed with form submission (opens email client)
+    }
+
+    // Fade-in reveal effect on scroll
+    function revealOnScroll() {
+      const reveals = document.querySelectorAll('.reveal');
+      const windowHeight = window.innerHeight;
+      const revealPoint = 150;
+
+      reveals.forEach(section => {
+        const sectionTop = section.getBoundingClientRect().top;
+        if (sectionTop < windowHeight - revealPoint) {
+          section.classList.add('visible');
+        }
+      });
+    }
+
+    window.addEventListener('scroll', revealOnScroll);
+    window.addEventListener('load', revealOnScroll);
+
+    // Tech background canvas animation
+    (() => {
+      const canvas = document.getElementById('tech-bg');
+      const ctx = canvas.getContext('2d');
+      let width, height;
+      let points = [];
+      const maxDistance = 150;
+      const pointCount = 40;
+
+      function random(min, max) {
+        return Math.random() * (max - min) + min;
+      }
+
+      function createPoints() {
+        points = [];
+        for (let i = 0; i < pointCount; i++) {
+          points.push({
+            x: random(0, width),
+            y: random(0, height),
+            vx: random(-0.5, 0.5),
+            vy: random(-0.5, 0.5),
+          });
+        }
+      }
+
+      function resize() {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        canvas.width = width;
+        canvas.height = height;
+        createPoints();
+      }
+
+      function distance(p1, p2) {
+        const dx = p1.x - p2.x;
+        const dy = p1.y - p2.y;
+        return Math.sqrt(dx * dx + dy * dy);
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, width, height);
+
+        for (const p of points) {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(130, 185, 255, 0.8)';
+          ctx.shadowColor = 'rgba(18, 95, 220, 0.85)';
+          ctx.shadowBlur = 10;
+          ctx.fill();
+          ctx.shadowBlur = 0;
+        }
+
+        for (let i = 0; i < points.length; i++) {
+          for (let j = i + 1; j < points.length; j++) {
+            const d = distance(points[i], points[j]);
+            if (d < maxDistance) {
+              const alpha = 1 - d / maxDistance;
+              ctx.beginPath();
+              ctx.moveTo(points[i].x, points[i].y);
+              ctx.lineTo(points[j].x, points[j].y);
+              ctx.strokeStyle = `rgba(100, 160, 255, ${alpha * 0.6})`;
+              ctx.lineWidth = 1;
+              ctx.shadowColor = 'rgba(50, 110, 255, 0.7)';
+              ctx.shadowBlur = 6;
+              ctx.stroke();
+              ctx.shadowBlur = 0;
+            }
+          }
+        }
+      }
+
+      function update() {
+        for (const p of points) {
+          p.x += p.vx;
+          p.y += p.vy;
+
+          if (p.x <= 0 || p.x >= width) p.vx = -p.vx;
+          if (p.y <= 0 || p.y >= height) p.vy = -p.vy;
+        }
+      }
+
+      function loop() {
+        update();
+        draw();
+        requestAnimationFrame(loop);
+      }
+
+      window.addEventListener('resize', () => {
+        resize();
+      });
+
+      resize();
+      loop();
+    })();
+  </script>
+</body>
+
+</html>
+
